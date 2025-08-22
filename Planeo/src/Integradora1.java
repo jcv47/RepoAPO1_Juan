@@ -1,8 +1,7 @@
 import java.time.LocalDate;
 import java.util.Scanner;
 
-public class Integradora1{
-
+public class Integradora1 {
     // Función para registrar UN curso
     public static void registrarCurso(Scanner sc, String[] codigoCurso, String[] nombreCurso, int[] creditosCurso, String[] profesorCurso, String[] salonCurso) {
         System.out.println("Ingrese el codigo del curso a registrar:");
@@ -34,6 +33,23 @@ public class Integradora1{
         return totalPorcentaje;
     }
 
+    //Funcion para registrar notas a actividades
+    public static void registrarNotas(Scanner sc, double[] notasActividad, int numActividades) {
+        for (int i = 0; i < numActividades; i++) {
+            System.out.println("Ingrese la nota para la actividad " + (i + 1) + ":");
+            notasActividad[i] = sc.nextDouble();
+        }
+    }
+
+    //Funcion para consultar promedio curso
+    public static double consultarPromedioCurso(double[] notasActividad, double[] porcentajeActividad, int numActividades) {
+        double sumaPonderada = 0.0;
+        for (int i = 0; i < numActividades; i++) {
+            sumaPonderada += notasActividad[i] * (porcentajeActividad[i] / 100);
+        }
+        return  sumaPonderada;
+    }
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
@@ -45,9 +61,11 @@ public class Integradora1{
         String[] nombreActividad = new String[5];
         LocalDate[] fechaEntrega = new LocalDate[5];
         double[] porcentajeActividad = new double[5];
+        double[] notasActividad = new double[5];
         int numActividades = 0;
         boolean cursoRegistrado = false;
         boolean actividadesRegistradas = false;
+        boolean notasRegistradas = false;
 
         int opcion;
         do {
@@ -96,6 +114,65 @@ public class Integradora1{
                     }
                     }
                     break;   
+
+                case 3:
+                    if (!actividadesRegistradas || !cursoRegistrado) {
+                        System.out.println("Primero debe registrar actividades o registrar curso (cual sea su caso) antes de ingresar notas.");
+                        break;
+                    }
+                    System.out.println("Ingreso notas a las actividades:");
+                    registrarNotas(sc, notasActividad, numActividades);
+                    notasRegistradas = true;
+                    
+                    for (int i = 0; i < numActividades; i++) {
+                        if (notasActividad[i] < 0 || notasActividad[i] > 5) {
+                            System.out.println("Error: La nota de la actividad " + nombreActividad[i] + " debe estar entre 0 y 5. Intente ingresar notas nuevamente.");
+                        } else {
+                            System.out.println("Nota registrada para la actividad " + nombreActividad[i] + ": " + notasActividad[i]);
+                            System.out.println("\n--- Actividades Registradas al curso " + nombreCurso[0] + " con su nota ---");
+                    for (int j = 0; j < numActividades; j++) {
+                        System.out.println("Actividad " + (j + 1) + ":");
+                        System.out.println("  Nombre: " + nombreActividad[j]);
+                        System.out.println("  Fecha de Entrega: " + fechaEntrega[j]);
+                        System.out.println("  Porcentaje: " + porcentajeActividad[j] + "%");
+                        System.out.println("  Nota: " + notasActividad[j]);
+                    }
+                        }
+                    }
+                    
+                    break;
+                case 4:
+                    if (!actividadesRegistradas) {
+                        System.out.println("No hay actividades registradas aún.");
+                    } else {
+                         System.out.println("\n--- Actividades del curso " + nombreCurso[0] + " ---");
+                    for (int i = 0; i < numActividades; i++) {
+                        System.out.println("Actividad " + (i + 1) + ":");
+                        System.out.println("  Nombre: " + nombreActividad[i]);
+                        System.out.println("  Fecha de Entrega: " + fechaEntrega[i]);
+                         System.out.println("  Porcentaje: " + porcentajeActividad[i] + "%");
+                    }
+                    }
+                    break;
+
+                case 5:
+                    if (!actividadesRegistradas || !notasRegistradas) {
+                        System.out.println("No hay actividades registradas o notas ingresadas aún.");
+                    } else {
+                        double promedio = consultarPromedioCurso(notasActividad, porcentajeActividad, numActividades);
+                        System.out.println(" ");
+                        for (int j = 0; j < numActividades; j++) {
+                        System.out.println("Actividad " + (j + 1) + ":");
+                        System.out.println("  Nombre: " + nombreActividad[j]);
+                        System.out.println("  Fecha de Entrega: " + fechaEntrega[j]);
+                        System.out.println("  Porcentaje: " + porcentajeActividad[j] + "%");
+                        System.out.println("  Nota: " + notasActividad[j]);
+                    }
+                    System.out.println(" ");
+                    System.out.println("El promedio ponderado del curso " + nombreCurso[0] + " es: " + promedio);
+                    }
+                    break;
+
                 case 0:
                     System.out.println("Saliendo...");
                     break;
@@ -107,3 +184,6 @@ public class Integradora1{
         sc.close();
     }
 }
+    
+
+

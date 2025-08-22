@@ -96,6 +96,11 @@ public class Integradora1 {
                     System.out.println("¿Cuántas actividades desea registrar? (máximo 5):");
                     numActividades = sc.nextInt();
 
+                    if (numActividades < 1 || numActividades > 5) {
+                        System.out.println("Error: Debe ingresar un número entre 1 y 5. Intente nuevamente.");
+                        break;
+                    }
+
                     double totalPorcentaje = registrarActividades(sc, nombreActividad, fechaEntrega, porcentajeActividad, numActividades);
 
                     if (totalPorcentaje != 100.0) {
